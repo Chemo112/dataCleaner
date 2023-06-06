@@ -27,7 +27,7 @@ DB.to_sql('bronze', engine, if_exists='replace', index=False)
 lista = [row for row in DB['subject']]
 argomenti = sorted(list(set(lista)))
 
-df = DB[['subject','course_description','Level','course_url']].copy()
+df = DB[['title','subject','course_description','Level','course_url']].copy()
 df.to_sql('silver', engine, if_exists='replace', index=False)
 
 df1 = DB[['subject','course_description','Level','course_url']].copy()
