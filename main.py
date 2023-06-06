@@ -28,11 +28,11 @@ lista = [row for row in DB['subject']]
 argomenti = sorted(list(set(lista)))
 
 df = DB[['subject','course_description','Level','course_url']].copy()
-df.to_sql('silver', conn, if_exists='replace', index=False)
+df.to_sql('silver', engine, if_exists='replace', index=False)
 
 df1 = DB[['subject','course_description','Level','course_url']].copy()
 
 df1.fillna(' ', inplace=True)  # fa il replace delle descrizioni mancanti
 df1 = df1.drop_duplicates()  # rimuove righe duplicate
-df1.to_sql('gold', conn, if_exists='replace', index=False)
+df1.to_sql('gold', engine, if_exists='replace', index=False)
 
