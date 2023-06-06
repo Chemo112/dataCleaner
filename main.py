@@ -1,9 +1,7 @@
 import psycopg2
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
 import os
 import pandas as pd
-
+import sqlalchemy
 
 db_host = os.environ.get('PGHOST')
 db_port = os.environ.get('PGPORT')
@@ -19,16 +17,15 @@ conn = psycopg2.connect(
     password=db_password
 )
 
-app = Flask(__name__)
+engine = sqlalchemy.create_engine('postgresql://' + db_user + ':' + db_password + '@' + db_host + ':' + db_port + '/' + db_name)
 
 DB = pd.read_csv("edx_courses.csv")
-DB.to_sql('bronze', conn, if_exists='replace', index=False)
+DB.to_sql('bronze', engine, if_exists='replace', index=False)
 
 lista = [row for row in DB['subject']]
 argomenti = sorted(list(set(lista)))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://' + db_user + ':' + db_password + '@' + db_host + ':' + db_port + '/' + db_name
-db = SQLAlchemy(app)
+
 
 def reccomender(subjects_exp):
     dict_sbj = dict()
@@ -55,5 +52,3 @@ def reccomender(subjects_exp):
     return res
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=os.getenv("PORT", default=5000))
