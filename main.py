@@ -21,7 +21,7 @@ engine = sqlalchemy.create_engine('postgresql://' + db_user + ':' + db_password 
 
 
 #here we must implement the csv input from the scaper
-DB = pd.read_csv("edx_courses.csv")
+DB = pd.read_csv("courses.csv")
 DB.to_sql('bronze', engine, if_exists='replace', index=False)
 
 lista = [row for row in DB['subject']]
